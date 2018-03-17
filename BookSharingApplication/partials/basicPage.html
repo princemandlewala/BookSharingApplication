@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="row" style="padding-top: 5%;">
+        <div class="offset-md-2 col-md-8">
+            <div class="input-group mb-3 z-depth-3">
+                <div class="input-group-prepend">
+                    <button class="btn btn-outline-dark dropdown-toggle rounded-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search using</button>
+                    <div class="dropdown-menu rounded-0">
+                        <div ng-repeat="category in searchFilter">
+                            <a class="dropdown-item" ng-click="categorySelect(category)" style="cursor: pointer;">{{category}}</a>
+                        </div>
+                    </div>
+                </div>
+                <input type="text" class="form-control bg-light" aria-label="Text input with dropdown button" ng-disabled = "!dropdownSelect" ng-model="searchBook">
+                <div class="input-group-append" ng-show="dropdownSelect">
+                    <span class="input-group-text rounded-0 bg-dark text-white">{{showSelected}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 2%;">
+        <div class="col-md-6" ng-repeat="book in booksList | customBookFilter:{term:searchBook, type:showSelected} | filter: searchBook" style="padding: 1%;">
+            <div class="card border-dark rounded-0 z-depth-3 animated bounceIn">
+                <div class="card-header rounded-0" style="background-color: black; color: white;">{{book.title}}</div>
+                <div class="card-body text-dark">
+                    <h5 class="card-title">Author:&nbsp;{{book.author}}</h5>
+                    <p class="card-text">Genre:&nbsp;{{book.genre}}</p>
+                    <button type="button" class="btn btn-outline-danger rounded-0" data-toggle="modal" data-target="#exampleModalCenter" ng-click="checkAvailability(book.id)">Check Availability</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content rounded-0 border-dark">
+                    <div class="modal-header rounded-0" style="background-color: black;">
+                        <h5 class="modal-title" id="exampleModalLongTitle" style="background-color: black; color: white;">{{bookData.Title}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="color: white;">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 border-right border-dark">
+                                <h2>Book Info</h2>
+                                <p><strong>Author: </strong>{{bookData.Author}}</p>
+                                <p><strong>Genre: </strong>{{bookData.Genre}}</p>
+                                <p><strong>Start Date: </strong>{{bookData.StartDate}}</p>
+                                <p><strong>End Date: </strong>{{bookData.EndDate}}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h2>Lender Info</h2>
+                                <p><strong>Email: </strong>{{bookData.Email}}</p>
+                                <p><strong>Name: </strong>{{bookData.FirstName}} {{bookData.LastName}}</p>
+                                <p><strong>Ratings: </strong>{{bookData.Ratings}}/5.00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" ng-hide="requestSentSuccessfully">
+                        <button type="button" class="btn btn-outline-danger rounded-0" ng-click="sendBorrowRequest(bookData.bookId)">Send Borrow Request</button>
+                    </div>
+                    <div>
+                        <p class="text-success" ng-show="requestSentSuccessfully" style="font-size:small;"><strong>Request Sent Successfully</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
